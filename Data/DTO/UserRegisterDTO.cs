@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace kyniusBETAPI.Data.DTO;
 
-public class UserDTO
+public class UserRegisterDTO
 {
     [Required(ErrorMessage = "Username is required")]
     public string UserName { get; set; } = string.Empty!;

@@ -16,9 +16,16 @@ public class AuthenticationController : ControllerBase
 
     [HttpPost]
     [Route("/register")]
-    public async Task<IActionResult> Register([FromBody] UserDTO model)
+    public async Task<IActionResult> Register([FromBody] UserRegisterDTO model)
     {
         var response = await _authenticationRepo.Register(model);
+        return Ok(response);
+    }
+    [HttpPost]
+    [Route("/login")]
+    public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
+    {
+        var response = await _authenticationRepo.Login(model);
         return Ok(response);
     }
 }
