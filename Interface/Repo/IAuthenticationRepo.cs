@@ -5,5 +5,6 @@ namespace kyniusBETAPI.Interface.Repo;
 
 public interface IAuthenticationRepo
 {
-    public Task<Response> Register(UserDTO model);
+    public Task<Response> Register(UserRegisterDTO model);
+    public Task<Response> Login(UserLoginDTO model);
 }
