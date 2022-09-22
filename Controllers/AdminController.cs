@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace kyniusBETAPI.Controllers;
 
+[Authorize(Roles = UserRoles.Owner)]
 public class AdminController : ApiController
 {
     private readonly RequestRepo _requestRepo;

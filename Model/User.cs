@@ -7,4 +7,5 @@ public class User : IdentityUser
     public string FirstName { get; set; } = String.Empty!;
     public string LastName { get; set; } = String.Empty!;
     public string AvatarImageUrl { get; set; } = String.Empty!;
+    public List<LeagueUser> LeagueUser { get; set; } = new List<LeagueUser>();
 }
