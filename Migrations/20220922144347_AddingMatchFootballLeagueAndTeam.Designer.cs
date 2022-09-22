@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using kyniusBETAPI.Data;
 
@@ -11,9 +12,11 @@ using kyniusBETAPI.Data;
 namespace kyniusBETAPI.Migrations
 {
     [DbContext(typeof(BetDB))]
-    partial class BetDBModelSnapshot : ModelSnapshot
+    [Migration("20220922144347_AddingMatchFootballLeagueAndTeam")]
+    partial class AddingMatchFootballLeagueAndTeam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,47 +185,6 @@ namespace kyniusBETAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FootballLeague");
-                });
-
-            modelBuilder.Entity("kyniusBETAPI.Model.League", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("League");
-                });
-
-            modelBuilder.Entity("kyniusBETAPI.Model.LeagueUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("LeagueId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LeagueId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("LeagueUser");
                 });
 
             modelBuilder.Entity("kyniusBETAPI.Model.Match", b =>
@@ -450,25 +412,6 @@ namespace kyniusBETAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("kyniusBETAPI.Model.LeagueUser", b =>
-                {
-                    b.HasOne("kyniusBETAPI.Model.League", "League")
-                        .WithMany("LeagueUser")
-                        .HasForeignKey("LeagueId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("kyniusBETAPI.Model.User", "User")
-                        .WithMany("LeagueUser")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("League");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("kyniusBETAPI.Model.Match", b =>
                 {
                     b.HasOne("kyniusBETAPI.Model.Team", "AwayTeam")
@@ -490,16 +433,6 @@ namespace kyniusBETAPI.Migrations
                     b.Navigation("HomeTeam");
 
                     b.Navigation("League");
-                });
-
-            modelBuilder.Entity("kyniusBETAPI.Model.League", b =>
-                {
-                    b.Navigation("LeagueUser");
-                });
-
-            modelBuilder.Entity("kyniusBETAPI.Model.User", b =>
-                {
-                    b.Navigation("LeagueUser");
                 });
 #pragma warning restore 612, 618
         }

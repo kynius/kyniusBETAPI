@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using kyniusBETAPI.AbstractModel;
 using kyniusBETAPI.Data.DTO;
 using kyniusBETAPI.Interface.Repo;
 using kyniusBETAPI.Model;

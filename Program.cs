@@ -17,6 +17,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<AuthenticationRepo>();
+builder.Services.AddTransient<RequestRepo>();
 builder.Services.AddDbContext<BetDB>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("betDB")));
 builder.Services.AddIdentity<User, IdentityRole>()
@@ -42,6 +43,7 @@ builder.Services.AddAuthentication(options =>
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
         };
     });
+builder.Services.AddAuthorization();
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -51,7 +53,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

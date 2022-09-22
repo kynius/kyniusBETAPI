@@ -1,5 +1,5 @@
+using kyniusBETAPI.AbstractModel;
 using kyniusBETAPI.Data.DTO;
-using kyniusBETAPI.Model;
 
 namespace kyniusBETAPI.Interface.Repo;
 

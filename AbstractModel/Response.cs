@@ -1,6 +1,4 @@
-using System.IdentityModel.Tokens.Jwt;
-
-namespace kyniusBETAPI.Model;
+namespace kyniusBETAPI.AbstractModel;
 
 public class Response
 {

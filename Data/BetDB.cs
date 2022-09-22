@@ -11,8 +11,20 @@ public class BetDB : IdentityDbContext<User>
             
     }
 
+    public DbSet<FootballLeague> FootballLeague { get; set; } = null!;
+    public DbSet<Team> Team { get; set; } = null!;
+    public DbSet<Match> Match { get; set; } = null!;
+    public DbSet<LeagueUser> LeagueUser = null!;
     protected override void OnModelCreating(ModelBuilder builder)
-    {
+    {   
+        builder.Entity<LeagueUser>()
+            .HasOne(c => c.User)
+            .WithMany(c => c.LeagueUser)
+            .HasForeignKey(c => c.UserId);
+        builder.Entity<LeagueUser>()
+            .HasOne(c => c.League)
+            .WithMany(c => c.LeagueUser)
+            .HasForeignKey(c => c.LeagueId);
         base.OnModelCreating(builder);
     }
 }
