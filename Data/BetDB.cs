@@ -11,6 +11,9 @@ public class BetDB : IdentityDbContext<User>
             
     }
 
+    public DbSet<FootballLeague> FootballLeague { get; set; } = null!;
+    public DbSet<Team> Team { get; set; } = null!;
+    public DbSet<Match> Match { get; set; } = null!;
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
