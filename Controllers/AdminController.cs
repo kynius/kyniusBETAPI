@@ -1,5 +1,5 @@
 using kyniusBETAPI.AbstractModel;
-using kyniusBETAPI.Repo;
+using kyniusBETAPI.Builder;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,15 +8,16 @@ namespace kyniusBETAPI.Controllers;
 [Authorize(Roles = UserRoles.Owner)]
 public class AdminController : ApiController
 {
-    private readonly RequestRepo _requestRepo;
+    private readonly AdminBuilder _builder;
 
-    public AdminController(RequestRepo requestRepo)
+    public AdminController(AdminBuilder builder)
     {
-        _requestRepo = requestRepo;
+        _builder = builder;
     }
+
     [HttpGet]
-    public async Task<IActionResult> GetMatches()
+    public async Task<IActionResult> SetMatches()
     {
-        return Ok(await _requestRepo.Request("fixtures?date=2022-09-22"));
+        return Ok(await _builder.Build());
     }
 }

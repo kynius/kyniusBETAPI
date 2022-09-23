@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using kyniusBETAPI.Data;
 
@@ -11,9 +12,11 @@ using kyniusBETAPI.Data;
 namespace kyniusBETAPI.Migrations
 {
     [DbContext(typeof(BetDB))]
-    partial class BetDBModelSnapshot : ModelSnapshot
+    [Migration("20220922190444_SmallChangeInMatch")]
+    partial class SmallChangeInMatch
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,6 +158,35 @@ namespace kyniusBETAPI.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("kyniusBETAPI.Model.FootballLeague", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Flag")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Logo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FootballLeague");
+                });
+
             modelBuilder.Entity("kyniusBETAPI.Model.League", b =>
                 {
                     b.Property<int>("Id")
@@ -196,7 +228,7 @@ namespace kyniusBETAPI.Migrations
                     b.ToTable("LeagueUser");
                 });
 
-            modelBuilder.Entity("kyniusBETAPI.Model.Match.FootballLeague", b =>
+            modelBuilder.Entity("kyniusBETAPI.Model.Match", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -204,214 +236,87 @@ namespace kyniusBETAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ApiId")
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "id");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "country");
-
-                    b.Property<string>("Flag")
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "flag");
-
-                    b.Property<string>("Logo")
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "logo");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FootballLeague");
-                });
-
-            modelBuilder.Entity("kyniusBETAPI.Model.Match.Goals", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("AwayGoals")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("Away")
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "away");
-
-                    b.Property<int?>("Home")
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "home");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Goals");
-
-                    b.HasAnnotation("Relational:JsonPropertyName", "penalty");
-                });
-
-            modelBuilder.Entity("kyniusBETAPI.Model.Match.Match", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int?>("AwayTeamExtra")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApiId")
+                    b.Property<int>("AwayTeamFull")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AwayId")
+                    b.Property<int>("AwayTeamHalf")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("Date")
+                    b.Property<int?>("AwayTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("AwayTeamPenalty")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HomeGoals")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HomeTeamExtra")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HomeTeamFull")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HomeTeamHalf")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HomeTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("HomeTeamPenalty")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsAwayWinner")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsHomeWinner")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LeagueId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("MatchDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FootballLeagueId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GoalsId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HomeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Referee")
+                    b.Property<string>("StadiumName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ScoreId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("StatusId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Timestamp")
+                    b.Property<int>("Time")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AwayId");
+                    b.HasIndex("AwayTeamId");
 
-                    b.HasIndex("FootballLeagueId");
+                    b.HasIndex("HomeTeamId");
 
-                    b.HasIndex("GoalsId");
-
-                    b.HasIndex("HomeId");
-
-                    b.HasIndex("ScoreId");
-
-                    b.HasIndex("StatusId");
+                    b.HasIndex("LeagueId");
 
                     b.ToTable("Match");
                 });
 
-            modelBuilder.Entity("kyniusBETAPI.Model.Match.Score", b =>
+            modelBuilder.Entity("kyniusBETAPI.Model.Team", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ExtratimeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FulltimeId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GoalsInFirsthalfId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("GoalsInSecondhalfId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HalftimeId")
-                        .HasColumnType("int");
-
-                    b.Property<bool?>("IsAwayWinnerFirstHalf")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsAwayWinnerFullMatch")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsAwayWinnerSecondHalf")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsHomeWinnerFirstHalf")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsHomeWinnerFullMatch")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsHomeWinnerSecondHalf")
-                        .HasColumnType("bit");
-
-                    b.Property<int?>("PenaltyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExtratimeId");
-
-                    b.HasIndex("FulltimeId");
-
-                    b.HasIndex("GoalsInFirsthalfId");
-
-                    b.HasIndex("GoalsInSecondhalfId");
-
-                    b.HasIndex("HalftimeId");
-
-                    b.HasIndex("PenaltyId");
-
-                    b.ToTable("Score");
-                });
-
-            modelBuilder.Entity("kyniusBETAPI.Model.Match.Status", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("Elapsed")
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "elapsed");
-
-                    b.Property<string>("Long")
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "long");
-
-                    b.Property<string>("Short")
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "short");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Status");
-                });
-
-            modelBuilder.Entity("kyniusBETAPI.Model.Match.Team", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ApiId")
-                        .HasColumnType("int")
-                        .HasAnnotation("Relational:JsonPropertyName", "id");
 
                     b.Property<string>("Logo")
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "logo");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)")
-                        .HasAnnotation("Relational:JsonPropertyName", "name");
+                    b.Property<string>("TeamName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -565,82 +470,27 @@ namespace kyniusBETAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("kyniusBETAPI.Model.Match.Match", b =>
+            modelBuilder.Entity("kyniusBETAPI.Model.Match", b =>
                 {
-                    b.HasOne("kyniusBETAPI.Model.Match.Team", "Away")
+                    b.HasOne("kyniusBETAPI.Model.Team", "AwayTeam")
                         .WithMany()
-                        .HasForeignKey("AwayId");
+                        .HasForeignKey("AwayTeamId");
 
-                    b.HasOne("kyniusBETAPI.Model.Match.FootballLeague", "FootballLeague")
+                    b.HasOne("kyniusBETAPI.Model.Team", "HomeTeam")
                         .WithMany()
-                        .HasForeignKey("FootballLeagueId");
+                        .HasForeignKey("HomeTeamId");
 
-                    b.HasOne("kyniusBETAPI.Model.Match.Goals", "Goals")
+                    b.HasOne("kyniusBETAPI.Model.FootballLeague", "League")
                         .WithMany()
-                        .HasForeignKey("GoalsId");
+                        .HasForeignKey("LeagueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("kyniusBETAPI.Model.Match.Team", "Home")
-                        .WithMany()
-                        .HasForeignKey("HomeId");
+                    b.Navigation("AwayTeam");
 
-                    b.HasOne("kyniusBETAPI.Model.Match.Score", "Score")
-                        .WithMany()
-                        .HasForeignKey("ScoreId");
+                    b.Navigation("HomeTeam");
 
-                    b.HasOne("kyniusBETAPI.Model.Match.Status", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId");
-
-                    b.Navigation("Away");
-
-                    b.Navigation("FootballLeague");
-
-                    b.Navigation("Goals");
-
-                    b.Navigation("Home");
-
-                    b.Navigation("Score");
-
-                    b.Navigation("Status");
-                });
-
-            modelBuilder.Entity("kyniusBETAPI.Model.Match.Score", b =>
-                {
-                    b.HasOne("kyniusBETAPI.Model.Match.Goals", "Extratime")
-                        .WithMany()
-                        .HasForeignKey("ExtratimeId");
-
-                    b.HasOne("kyniusBETAPI.Model.Match.Goals", "Fulltime")
-                        .WithMany()
-                        .HasForeignKey("FulltimeId");
-
-                    b.HasOne("kyniusBETAPI.Model.Match.Goals", "GoalsInFirsthalf")
-                        .WithMany()
-                        .HasForeignKey("GoalsInFirsthalfId");
-
-                    b.HasOne("kyniusBETAPI.Model.Match.Goals", "GoalsInSecondhalf")
-                        .WithMany()
-                        .HasForeignKey("GoalsInSecondhalfId");
-
-                    b.HasOne("kyniusBETAPI.Model.Match.Goals", "Halftime")
-                        .WithMany()
-                        .HasForeignKey("HalftimeId");
-
-                    b.HasOne("kyniusBETAPI.Model.Match.Goals", "Penalty")
-                        .WithMany()
-                        .HasForeignKey("PenaltyId");
-
-                    b.Navigation("Extratime");
-
-                    b.Navigation("Fulltime");
-
-                    b.Navigation("GoalsInFirsthalf");
-
-                    b.Navigation("GoalsInSecondhalf");
-
-                    b.Navigation("Halftime");
-
-                    b.Navigation("Penalty");
+                    b.Navigation("League");
                 });
 
             modelBuilder.Entity("kyniusBETAPI.Model.League", b =>

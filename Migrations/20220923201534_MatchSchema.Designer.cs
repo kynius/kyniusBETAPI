@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using kyniusBETAPI.Data;
 
@@ -11,9 +12,11 @@ using kyniusBETAPI.Data;
 namespace kyniusBETAPI.Migrations
 {
     [DbContext(typeof(BetDB))]
-    partial class BetDBModelSnapshot : ModelSnapshot
+    [Migration("20220923201534_MatchSchema")]
+    partial class MatchSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,6 +227,14 @@ namespace kyniusBETAPI.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasAnnotation("Relational:JsonPropertyName", "name");
 
+                    b.Property<string>("Round")
+                        .HasColumnType("nvarchar(max)")
+                        .HasAnnotation("Relational:JsonPropertyName", "round");
+
+                    b.Property<int?>("Season")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "season");
+
                     b.HasKey("Id");
 
                     b.ToTable("FootballLeague");
@@ -236,6 +247,10 @@ namespace kyniusBETAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApiId")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "id");
 
                     b.Property<int?>("Away")
                         .HasColumnType("int")
@@ -315,10 +330,17 @@ namespace kyniusBETAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ApiId")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "id");
+
                     b.Property<int?>("ExtratimeId")
                         .HasColumnType("int");
 
                     b.Property<int?>("FulltimeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GoalsInExtratimeId")
                         .HasColumnType("int");
 
                     b.Property<int?>("GoalsInFirsthalfId")
@@ -330,24 +352,6 @@ namespace kyniusBETAPI.Migrations
                     b.Property<int?>("HalftimeId")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("IsAwayWinnerFirstHalf")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsAwayWinnerFullMatch")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsAwayWinnerSecondHalf")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsHomeWinnerFirstHalf")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsHomeWinnerFullMatch")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("IsHomeWinnerSecondHalf")
-                        .HasColumnType("bit");
-
                     b.Property<int?>("PenaltyId")
                         .HasColumnType("int");
 
@@ -356,6 +360,8 @@ namespace kyniusBETAPI.Migrations
                     b.HasIndex("ExtratimeId");
 
                     b.HasIndex("FulltimeId");
+
+                    b.HasIndex("GoalsInExtratimeId");
 
                     b.HasIndex("GoalsInFirsthalfId");
 
@@ -375,6 +381,10 @@ namespace kyniusBETAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApiId")
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "id");
 
                     b.Property<int?>("Elapsed")
                         .HasColumnType("int")
@@ -412,6 +422,10 @@ namespace kyniusBETAPI.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)")
                         .HasAnnotation("Relational:JsonPropertyName", "name");
+
+                    b.Property<bool?>("Winner")
+                        .HasColumnType("bit")
+                        .HasAnnotation("Relational:JsonPropertyName", "winner");
 
                     b.HasKey("Id");
 
@@ -614,6 +628,10 @@ namespace kyniusBETAPI.Migrations
                         .WithMany()
                         .HasForeignKey("FulltimeId");
 
+                    b.HasOne("kyniusBETAPI.Model.Match.Goals", "GoalsInExtratime")
+                        .WithMany()
+                        .HasForeignKey("GoalsInExtratimeId");
+
                     b.HasOne("kyniusBETAPI.Model.Match.Goals", "GoalsInFirsthalf")
                         .WithMany()
                         .HasForeignKey("GoalsInFirsthalfId");
@@ -633,6 +651,8 @@ namespace kyniusBETAPI.Migrations
                     b.Navigation("Extratime");
 
                     b.Navigation("Fulltime");
+
+                    b.Navigation("GoalsInExtratime");
 
                     b.Navigation("GoalsInFirsthalf");
 

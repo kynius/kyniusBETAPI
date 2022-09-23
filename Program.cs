@@ -1,8 +1,11 @@
 using System.Text;
+using kyniusBETAPI.Builder;
 using kyniusBETAPI.Data;
 using kyniusBETAPI.Interface.Repo;
+using kyniusBETAPI.Interface.Service;
 using kyniusBETAPI.Model;
 using kyniusBETAPI.Repo;
+using kyniusBETAPI.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +19,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<AuthenticationRepo>();
-builder.Services.AddTransient<RequestRepo>();
+builder.Services.AddTransient<IAuthenticationRepo,AuthenticationRepo>();
+builder.Services.AddTransient<IRequestRepo,RequestRepo>();
+builder.Services.AddTransient<AdminBuilder>();
+builder.Services.AddTransient<IMatchRepo,MatchRepo>();
+builder.Services.AddTransient<IFootballLeagueRepo,FootballLeagueRepo>();
+builder.Services.AddTransient<IGoalsRepo,GoalsRepo>();
+builder.Services.AddTransient<IScoreRepo,ScoreRepo>();
+builder.Services.AddTransient<IStatusRepo,StatusRepo>();
+builder.Services.AddTransient<ITeamRepo,TeamRepo>();
+builder.Services.AddTransient<IMatchService,MatchService>();
+builder.Services.AddTransient<IScoreService,ScoreService>();
 builder.Services.AddDbContext<BetDB>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("betDB")));
 builder.Services.AddIdentity<User, IdentityRole>()
