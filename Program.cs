@@ -1,12 +1,15 @@
 using System.Text;
 using kyniusBETAPI.Builder;
 using kyniusBETAPI.Data;
+using kyniusBETAPI.Handler;
 using kyniusBETAPI.Interface.Repo;
 using kyniusBETAPI.Interface.Service;
 using kyniusBETAPI.Model;
 using kyniusBETAPI.Repo;
+using kyniusBETAPI.Requirement;
 using kyniusBETAPI.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -30,6 +33,11 @@ builder.Services.AddTransient<IStatusRepo,StatusRepo>();
 builder.Services.AddTransient<ITeamRepo,TeamRepo>();
 builder.Services.AddTransient<IMatchService,MatchService>();
 builder.Services.AddTransient<IScoreService,ScoreService>();
+builder.Services.AddTransient<ILeagueRepo,LeagueRepo>();
+builder.Services.AddTransient<ILeagueService,LeagueService>();
+builder.Services.AddTransient<IUserRepo,UserRepo>();
+builder.Services.AddTransient<LeagueAdminAccessHandler>();
+builder.Services.AddTransient<LeagueUserAccessHandler>();
 builder.Services.AddDbContext<BetDB>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("betDB")));
 builder.Services.AddIdentity<User, IdentityRole>()
@@ -55,7 +63,13 @@ builder.Services.AddAuthentication(options =>
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
         };
     });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("IsLeagueAdmin", policy =>
+        policy.Requirements.Add(new LeagueAdminAccessRequirement()));
+    options.AddPolicy("IsLeagueUser", policy =>
+        policy.Requirements.Add(new LeagueUserAccessRequirement()));
+});
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

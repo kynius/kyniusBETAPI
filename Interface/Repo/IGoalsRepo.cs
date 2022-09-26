@@ -4,6 +4,6 @@ namespace kyniusBETAPI.Interface.Repo;
 
 public interface IGoalsRepo
 {
-    public Task<Goals> CheckGoalsInBase(Goals model);
-    public Task<Goals> AddGoalsToBase(Goals model);
+    Task<Goals> CheckGoalsInBase(Goals model);
+    Task<Goals> AddGoalsToBase(Goals model);
 }

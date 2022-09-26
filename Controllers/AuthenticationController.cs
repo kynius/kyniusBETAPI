@@ -1,6 +1,6 @@
+using System.Net;
 using kyniusBETAPI.Data.DTO;
 using kyniusBETAPI.Interface.Repo;
-using kyniusBETAPI.Repo;
 using Microsoft.AspNetCore.Mvc;
 
 namespace kyniusBETAPI.Controllers;
@@ -16,13 +16,21 @@ public class AuthenticationController : ApiController
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] UserRegisterDTO model)
     {
-        var response = await _authenticationRepo.Register(model);
-        return Ok(response);
+        if (ModelState.IsValid)
+        {
+            var response = await _authenticationRepo.Register(model);
+            return Ok(response);
+        }
+        return BadRequest(ModelState);
     }
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
     {
-        var response = await _authenticationRepo.Login(model);
-        return Ok(response);
+        if (ModelState.IsValid)
+        {
+            var response = await _authenticationRepo.Login(model);
+            return Ok(response);
+        }
+        return BadRequest(ModelState);
     }
 }

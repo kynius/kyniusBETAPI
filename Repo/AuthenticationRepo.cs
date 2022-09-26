@@ -89,7 +89,6 @@ public class AuthenticationRepo : IAuthenticationRepo
             var encryptedToken = new JwtSecurityTokenHandler().WriteToken(token);
             return new Response { Token = encryptedToken, Message = "User is loged in", IsSucceeded = true, ResponseNumber = StatusCodes.Status202Accepted};
         }
-
         return new Response
         {
             Message = "Login or password is valid", 
