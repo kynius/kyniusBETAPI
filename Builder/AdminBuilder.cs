@@ -18,7 +18,7 @@ public class AdminBuilder
     public async Task<List<Match>> Build()
     {
         var dates = new List<string>();
-        var date = DateTime.Now.AddDays(-1);
+        var date = DateTime.Now;
         var d = date.AddDays(6).ToString("yyyy-MM-dd");
         var query = $"fixtures?to={d}&season=2022&league=5&from={date.ToString("yyyy-MM-dd")}"; 
         var response = await _requestRepo.Request<List<MatchDTO>>(query);
