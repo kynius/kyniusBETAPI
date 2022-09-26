@@ -16,7 +16,6 @@ public class ScoreRepo : IScoreRepo
 
     public async Task<Score> CheckScoreInBase(Score model)
     {
-        model = await CheckWhenGoalsWasScored(model);
         var score = await AddScoreToBase(model);
         return score;
     }
@@ -34,7 +33,8 @@ public class ScoreRepo : IScoreRepo
         {
             return model;
         }
-        model.GoalsInFirsthalf = model.Halftime;
+        model.GoalsInFirsthalf.Home = model.Halftime.Home;
+        model.GoalsInFirsthalf.Away = model.Halftime.Away;
         model.GoalsInSecondhalf.Home = model.Fulltime.Home - model.Halftime.Home;
         model.GoalsInSecondhalf.Away = model.Fulltime.Away - model.Halftime.Away;
         //First Half
@@ -93,8 +93,6 @@ public class ScoreRepo : IScoreRepo
             model.IsHomeWinnerFullMatch = false;
             model.IsAwayWinnerFullMatch = true;
         }
-        model.GoalsInFirsthalf = await _goalsRepo.CheckGoalsInBase(model.GoalsInFirsthalf);
-        model.GoalsInSecondhalf = await _goalsRepo.CheckGoalsInBase(model.GoalsInSecondhalf);
         return model;
     }
 }

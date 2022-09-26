@@ -22,6 +22,9 @@ public class ScoreService : IScoreService
         model.Fulltime = await _goalsRepo.CheckGoalsInBase(model.Fulltime);
         model.Extratime = await _goalsRepo.CheckGoalsInBase(model.Extratime);
         model.Penalty = await _goalsRepo.CheckGoalsInBase(model.Penalty);
+        model = await _scoreRepo.CheckWhenGoalsWasScored(model);
+        model.GoalsInFirsthalf = await _goalsRepo.CheckGoalsInBase(model.GoalsInFirsthalf);
+        model.GoalsInSecondhalf = await _goalsRepo.CheckGoalsInBase(model.GoalsInSecondhalf);
         var score = await _scoreRepo.CheckScoreInBase(model);
         return score;
     }
