@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using kyniusBETAPI.Data;
 
@@ -11,9 +12,11 @@ using kyniusBETAPI.Data;
 namespace kyniusBETAPI.Migrations
 {
     [DbContext(typeof(BetDB))]
-    partial class BetDBModelSnapshot : ModelSnapshot
+    [Migration("20220923212251_ChangesInScore")]
+    partial class ChangesInScore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

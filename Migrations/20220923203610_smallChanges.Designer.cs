@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using kyniusBETAPI.Data;
 
@@ -11,9 +12,11 @@ using kyniusBETAPI.Data;
 namespace kyniusBETAPI.Migrations
 {
     [DbContext(typeof(BetDB))]
-    partial class BetDBModelSnapshot : ModelSnapshot
+    [Migration("20220923203610_smallChanges")]
+    partial class smallChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -321,6 +324,9 @@ namespace kyniusBETAPI.Migrations
                     b.Property<int?>("FulltimeId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("GoalsInExtratimeId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("GoalsInFirsthalfId")
                         .HasColumnType("int");
 
@@ -356,6 +362,8 @@ namespace kyniusBETAPI.Migrations
                     b.HasIndex("ExtratimeId");
 
                     b.HasIndex("FulltimeId");
+
+                    b.HasIndex("GoalsInExtratimeId");
 
                     b.HasIndex("GoalsInFirsthalfId");
 
@@ -614,6 +622,10 @@ namespace kyniusBETAPI.Migrations
                         .WithMany()
                         .HasForeignKey("FulltimeId");
 
+                    b.HasOne("kyniusBETAPI.Model.Match.Goals", "GoalsInExtratime")
+                        .WithMany()
+                        .HasForeignKey("GoalsInExtratimeId");
+
                     b.HasOne("kyniusBETAPI.Model.Match.Goals", "GoalsInFirsthalf")
                         .WithMany()
                         .HasForeignKey("GoalsInFirsthalfId");
@@ -633,6 +645,8 @@ namespace kyniusBETAPI.Migrations
                     b.Navigation("Extratime");
 
                     b.Navigation("Fulltime");
+
+                    b.Navigation("GoalsInExtratime");
 
                     b.Navigation("GoalsInFirsthalf");
 
