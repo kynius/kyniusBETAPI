@@ -1,16 +1,15 @@
-using System.Net;
 using kyniusBETAPI.Data.DTO;
-using kyniusBETAPI.Interface.Repo;
+using kyniusBETAPI.Interface.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace kyniusBETAPI.Controllers;
 public class AuthenticationController : ApiController
 {
-    private readonly IAuthenticationRepo _authenticationRepo;
+    private readonly IAuthenticationService _authenticationService;
 
-    public AuthenticationController(IAuthenticationRepo authenticationRepo)
+    public AuthenticationController(IAuthenticationService authenticationService)
     {
-        _authenticationRepo = authenticationRepo;
+        _authenticationService = authenticationService;
     }
 
     [HttpPost]
@@ -18,7 +17,7 @@ public class AuthenticationController : ApiController
     {
         if (ModelState.IsValid)
         {
-            var response = await _authenticationRepo.Register(model);
+            var response = await _authenticationService.Register(model);
             return Ok(response);
         }
         return BadRequest(ModelState);
@@ -28,7 +27,7 @@ public class AuthenticationController : ApiController
     {
         if (ModelState.IsValid)
         {
-            var response = await _authenticationRepo.Login(model);
+            var response = await _authenticationService.Login(model);
             return Ok(response);
         }
         return BadRequest(ModelState);

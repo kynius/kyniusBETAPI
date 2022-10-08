@@ -22,7 +22,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<IAuthenticationRepo,AuthenticationRepo>();
+builder.Services.AddTransient<IAuthenticationService,AuthenticationService>();
 builder.Services.AddTransient<IRequestRepo,RequestRepo>();
 builder.Services.AddTransient<AdminBuilder>();
 builder.Services.AddTransient<IMatchRepo,MatchRepo>();

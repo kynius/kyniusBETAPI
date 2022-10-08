@@ -1,9 +1,9 @@
 using kyniusBETAPI.AbstractModel;
 using kyniusBETAPI.Data.DTO;
 
-namespace kyniusBETAPI.Interface.Repo;
+namespace kyniusBETAPI.Interface.Service;
 
-public interface IAuthenticationRepo
+public interface IAuthenticationService
 {
     Task<Response> Register(UserRegisterDTO model);
     Task<Response> Login(UserLoginDTO model);

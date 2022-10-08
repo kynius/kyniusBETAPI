@@ -3,21 +3,21 @@ using System.Security.Claims;
 using System.Text;
 using kyniusBETAPI.AbstractModel;
 using kyniusBETAPI.Data.DTO;
-using kyniusBETAPI.Interface.Repo;
+using kyniusBETAPI.Interface.Service;
 using kyniusBETAPI.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace kyniusBETAPI.Repo;
+namespace kyniusBETAPI.Service;
 
-public class AuthenticationRepo : IAuthenticationRepo
+public class AuthenticationService : IAuthenticationService
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
-    public AuthenticationRepo(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+    public AuthenticationService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -64,7 +64,6 @@ public class AuthenticationRepo : IAuthenticationRepo
         {
             user = await _userManager.FindByNameAsync(model.UserName);
         }
-
         if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
         {
             var userRoles = await _userManager.GetRolesAsync(user);

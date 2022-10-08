@@ -1,4 +1,5 @@
 using kyniusBETAPI.Data.DTO;
+using kyniusBETAPI.Data.ViewModel;
 using kyniusBETAPI.Model;
 
 namespace kyniusBETAPI.Interface.Service;
@@ -6,4 +7,5 @@ namespace kyniusBETAPI.Interface.Service;
 public interface ILeagueService
 {
     Task<League> AddLeagueToBase(LeagueDTO model);
+    Task<List<LeagueViewModel>> GetLeaguesByUserName(string userName);
 }

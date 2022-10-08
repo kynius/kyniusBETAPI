@@ -1,4 +1,5 @@
 using kyniusBETAPI.Data.DTO;
+using kyniusBETAPI.Data.ViewModel;
 using kyniusBETAPI.Interface.Repo;
 using kyniusBETAPI.Interface.Service;
 using kyniusBETAPI.Model;
@@ -20,7 +21,14 @@ public class LeagueService : ILeagueService
     {
         var league = await _leagueRepo.AddLeagueToBase(model);
         var user = await _userRepo.GetUserByUserName(model.UserName);
-        await _leagueRepo.AddLeagueUserToBase(user, league);
+        await _leagueRepo.AddLeagueUserToBase(user, league, true);
         return league;
+    }
+
+    public async Task<List<LeagueViewModel>> GetLeaguesByUserName(string userName)
+    {
+        var user = await _userRepo.GetUserByUserName(userName);
+        var leagues = await _leagueRepo.GetAllLeaguesByUserId(user.Id);
+        return leagues;
     }
 }
