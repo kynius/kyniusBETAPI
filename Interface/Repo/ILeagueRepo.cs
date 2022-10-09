@@ -7,6 +7,7 @@ namespace kyniusBETAPI.Interface.Repo;
 
 public interface ILeagueRepo
 {
+    Task<League> GetLeagueById(int id);
     Task<League> AddLeagueToBase(LeagueDTO model);
     Task AddLeagueUserToBase(User user, League league, bool isAdmin);
     Task<List<LeagueViewModel>> GetAllLeaguesByUserId(string userId);

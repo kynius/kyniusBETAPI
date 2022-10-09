@@ -47,4 +47,17 @@ public class InviteController : ApiController
         var response = await _inviteService.GetAllInvites(userName, received:false, onlyWaiting:true);
         return Ok(response);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> AcceptInvite(int id)
+    {
+        var response = await _inviteService.AcceptInvite(id, User.Claims.First(x => x.Type == ClaimTypes.Name).Value);
+        return Ok(response);
+    }
+    [HttpPost]
+    public async Task<IActionResult> RejectInvite(int id)
+    {
+        var response = await _inviteService.RejectInvite(id, User.Claims.First(x => x.Type == ClaimTypes.Name).Value);
+        return Ok(response);
+    }
 }

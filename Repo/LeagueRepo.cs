@@ -18,6 +18,11 @@ public class LeagueRepo : ILeagueRepo
         _db = db;
     }
 
+    public async Task<League> GetLeagueById(int id)
+    {
+        return await _db.League.FirstOrDefaultAsync(x => x.Id == id);
+    }
+
     public async Task<League> AddLeagueToBase(LeagueDTO model)
     {
         var league = new League(model);
@@ -29,8 +34,10 @@ public class LeagueRepo : ILeagueRepo
     {
         var leagueUser = new LeagueUser
         {
-            UserId = user.Id,
             LeagueId = league.Id,
+            UserId = user.Id,
+            League = league,
+            User = user
         };
         if (isAdmin is true)
         {

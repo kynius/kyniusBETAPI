@@ -26,7 +26,7 @@ public class LeagueService : ILeagueService
         return new Response
         {
             IsSucceeded = true,
-            Message = league,
+            Message = new LeagueViewModel(league),
             ResponseNumber = StatusCodes.Status201Created
         };
     }
