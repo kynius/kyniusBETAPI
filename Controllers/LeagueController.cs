@@ -24,8 +24,8 @@ public class LeagueController : ApiController
         if (ModelState.IsValid)
         {
             model.UserName = User.Claims.First(x => x.Type == ClaimTypes.Name).Value;
-            var league = await _leagueService.AddLeagueToBase(model);
-            return Ok(league);
+            var response = await _leagueService.AddLeagueToBase(model);
+            return Ok(response);
         }
         return BadRequest(ModelState);
     }
@@ -35,6 +35,7 @@ public class LeagueController : ApiController
     {
         var userName = User.Claims.First(x => x.Type == ClaimTypes.Name).Value;
         var leagues = await _leagueService.GetLeaguesByUserName(userName);
+        var strings = new List<string>();
         if (leagues.Any())
         {
             return Ok(leagues);
@@ -43,7 +44,31 @@ public class LeagueController : ApiController
         {
             IsSucceeded = false,
             Message = "User have no leagues",
-            ResponseNumber = 404
+            ResponseNumber = StatusCodes.Status404NotFound
+        });
+    }
+    [HttpGet]
+    [Route("{leagueId}")]
+    [Authorize(Policy = "IsLeagueAdmin")]
+    public async Task<IActionResult> GetAdminPanelByLeagueId(int leagueId)
+    {
+        return Ok(new Response
+        {
+            IsSucceeded = true,
+            Message = "Authorized",
+            ResponseNumber = StatusCodes.Status401Unauthorized
+        });
+    }
+    [HttpGet]
+    [Route("{leagueId}")]
+    [Authorize(Policy = "IsLeagueUser")]
+    public async Task<IActionResult> GetUserPanelByLeagueId(int leagueId)
+    {
+        return Ok(new Response
+        {
+            IsSucceeded = true,
+            Message = "Authorized",
+            ResponseNumber = StatusCodes.Status200OK
         });
     }
 }

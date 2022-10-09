@@ -36,8 +36,10 @@ builder.Services.AddTransient<IScoreService,ScoreService>();
 builder.Services.AddTransient<ILeagueRepo,LeagueRepo>();
 builder.Services.AddTransient<ILeagueService,LeagueService>();
 builder.Services.AddTransient<IUserRepo,UserRepo>();
-builder.Services.AddTransient<LeagueAdminAccessHandler>();
-builder.Services.AddTransient<LeagueUserAccessHandler>();
+builder.Services.AddTransient<IInviteRepo,InviteRepo>();
+builder.Services.AddTransient<IInviteService,InviteService>();
+builder.Services.AddSingleton<IAuthorizationHandler, LeagueAdminAccessHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, LeagueUserAccessHandler>();
 builder.Services.AddDbContext<BetDB>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("betDB")));
 builder.Services.AddIdentity<User, IdentityRole>()

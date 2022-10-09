@@ -1,3 +1,4 @@
+using kyniusBETAPI.AbstractModel;
 using kyniusBETAPI.Data.DTO;
 using kyniusBETAPI.Data.ViewModel;
 using kyniusBETAPI.Interface.Repo;
@@ -17,12 +18,17 @@ public class LeagueService : ILeagueService
         _userRepo = userRepo;
     }
 
-    public async Task<League> AddLeagueToBase(LeagueDTO model)
+    public async Task<Response> AddLeagueToBase(LeagueDTO model)
     {
         var league = await _leagueRepo.AddLeagueToBase(model);
         var user = await _userRepo.GetUserByUserName(model.UserName);
         await _leagueRepo.AddLeagueUserToBase(user, league, true);
-        return league;
+        return new Response
+        {
+            IsSucceeded = true,
+            Message = league,
+            ResponseNumber = StatusCodes.Status201Created
+        };
     }
 
     public async Task<List<LeagueViewModel>> GetLeaguesByUserName(string userName)

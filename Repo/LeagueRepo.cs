@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using kyniusBETAPI.AbstractModel;
 using kyniusBETAPI.Data;
 using kyniusBETAPI.Data.DTO;
@@ -42,7 +43,6 @@ public class LeagueRepo : ILeagueRepo
         await _db.LeagueUser.AddAsync(leagueUser);
         await _db.SaveChangesAsync();
     }
-
     public async Task<List<LeagueViewModel>> GetAllLeaguesByUserId(string userId)
     {
         var leaguesFromDb = await _db.League.Include(x => x.LeagueUser).ToListAsync();
@@ -60,12 +60,32 @@ public class LeagueRepo : ILeagueRepo
                 }
             }
         }
-
         var mappedLeagues = new List<LeagueViewModel>();
         foreach (var l in leagues)
         {
             mappedLeagues.Add(new LeagueViewModel(l));
         }
         return mappedLeagues;
+    }
+
+    public async Task<List<Claim>> GetClaimByLeagueUserList(List<LeagueUser> leagueUsers)
+    {
+        var claims = new List<Claim>();
+        foreach (var lu in leagueUsers) 
+        {
+            if (lu.Role == UserRoles.Admin)
+            {
+                claims.Add(new Claim(lu.LeagueId.ToString(), UserRoles.Admin));
+            }
+            else
+            {
+                claims.Add(new Claim(lu.LeagueId.ToString(), UserRoles.User));
+            }
+        }
+        return claims;
+    }
+    public async Task<List<LeagueUser>> GetLeagueUsersByUserId(string userId)
+    {
+        return await _db.LeagueUser.Where(x => x.UserId == userId).ToListAsync();
     }
 }
