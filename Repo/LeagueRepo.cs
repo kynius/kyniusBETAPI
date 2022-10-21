@@ -74,23 +74,6 @@ public class LeagueRepo : ILeagueRepo
         }
         return mappedLeagues;
     }
-
-    public async Task<List<Claim>> GetClaimByLeagueUserList(List<LeagueUser> leagueUsers)
-    {
-        var claims = new List<Claim>();
-        foreach (var lu in leagueUsers) 
-        {
-            if (lu.Role == UserRoles.Admin)
-            {
-                claims.Add(new Claim(lu.LeagueId.ToString(), UserRoles.Admin));
-            }
-            else
-            {
-                claims.Add(new Claim(lu.LeagueId.ToString(), UserRoles.User));
-            }
-        }
-        return claims;
-    }
     public async Task<List<LeagueUser>> GetLeagueUsersByUserId(string userId)
     {
         return await _db.LeagueUser.Where(x => x.UserId == userId).ToListAsync();

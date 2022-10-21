@@ -26,7 +26,6 @@ public class AuthenticationService : IAuthenticationService
         _configuration = configuration;
         _leagueRepo = leagueRepo;
     }
-
     public async Task<Response> Register(UserRegisterDTO model)
     {
         var userExist = await _userManager.FindByNameAsync(model.UserName);
@@ -55,7 +54,6 @@ public class AuthenticationService : IAuthenticationService
             ResponseNumber = StatusCodes.Status201Created
         };
     }
-
     public async Task<Response> Login(UserLoginDTO model)
     {
         var user = new User();
@@ -78,7 +76,6 @@ public class AuthenticationService : IAuthenticationService
             var secret = _configuration["JWT:Secret"];
             var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
             user.LeagueUser = await _leagueRepo.GetLeagueUsersByUserId(user.Id);
-            authClaims.AddRange(await _leagueRepo.GetClaimByLeagueUserList(user.LeagueUser));
             foreach (var userRole in userRoles)
             {
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));

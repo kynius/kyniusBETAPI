@@ -3,24 +3,25 @@ using kyniusBETAPI.AbstractModel;
 using kyniusBETAPI.Interface.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using IAuthorizationService = kyniusBETAPI.Interface.Service.IAuthorizationService;
 
 namespace kyniusBETAPI.Controllers;
 
 public class InviteController : ApiController
 {
     private readonly IInviteService _inviteService;
-
-    public InviteController(IInviteService inviteService)
+    private readonly IAuthorizationService _authorizationService;
+    public InviteController(IInviteService inviteService, IAuthorizationService authorizationService)
     {
         _inviteService = inviteService;
+        _authorizationService = authorizationService;
     }
 
     [HttpPost]
     [Route("{leagueId}")]
-    [Authorize(Policy = "IsLeagueAdmin")]
     public async Task<IActionResult> SendInvite(int leagueId, [FromBody] string invitedUserName)
     {
-        if (ModelState.IsValid)
+        if (await _authorizationService.CheckIsAdmin(leagueId, User.Claims.First(x => x.Type == ClaimTypes.Name).Value))
         {
             var response = await _inviteService.SendInvite(leagueId, invitedUserName,
                 User.Claims.First(x => x.Type == ClaimTypes.Name).Value);
@@ -30,7 +31,7 @@ public class InviteController : ApiController
         {
             IsSucceeded = false,
             Message = ModelState,
-            ResponseNumber = StatusCodes.Status404NotFound
+            ResponseNumber = StatusCodes.Status401Unauthorized
         });
     }
     [HttpGet]
