@@ -75,7 +75,6 @@ public class AuthenticationService : IAuthenticationService
             };
             var secret = _configuration["JWT:Secret"];
             var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
-            user.LeagueUser = await _leagueRepo.GetLeagueUsersByUserId(user.Id);
             foreach (var userRole in userRoles)
             {
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));

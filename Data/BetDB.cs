@@ -20,6 +20,7 @@ public class BetDB : IdentityDbContext<User>
     public DbSet<Status> Status { get; set; }= null!;
     public DbSet<Team> Team { get; set; }= null!;
     public DbSet<Invite> Invite { get; set; }= null!;
+    public DbSet<Bet> Bet { get; set; }= null!;
     protected override void OnModelCreating(ModelBuilder builder)
     {   
         builder.Entity<LeagueUser>()

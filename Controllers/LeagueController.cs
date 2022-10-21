@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace kyniusBETAPI.Controllers;
-
+[Authorize]
 public class LeagueController : ApiController
 {
  
@@ -17,8 +17,7 @@ public class LeagueController : ApiController
     {
         _leagueService = leagueService;
     }
-    [HttpPost] 
-    [Authorize] 
+    [HttpPost]
     public async Task<IActionResult> AddLeague([FromBody] LeagueDTO model)
     {
         if (ModelState.IsValid)
@@ -30,7 +29,6 @@ public class LeagueController : ApiController
         return BadRequest(ModelState);
     }
     [HttpGet]
-    [Authorize] 
     public async Task<IActionResult> GetAllLeaguesByUser()
     {
         var userName = User.Claims.First(x => x.Type == ClaimTypes.Name).Value;
@@ -49,7 +47,6 @@ public class LeagueController : ApiController
     }
     [HttpGet]
     [Route("{leagueId}")]
-    [Authorize(Policy = "IsLeagueAdmin")]
     public async Task<IActionResult> GetAdminPanelByLeagueId(int leagueId)
     {
         return Ok(new Response
@@ -61,7 +58,6 @@ public class LeagueController : ApiController
     }
     [HttpGet]
     [Route("{leagueId}")]
-    [Authorize(Policy = "IsLeagueUser")]
     public async Task<IActionResult> GetUserPanelByLeagueId(int leagueId)
     {
         return Ok(new Response

@@ -18,8 +18,7 @@ public class AuthorizationService : IAuthorizationService
     public async Task<bool> CheckIsAdmin(int leagueId, string userName)
     {
         var user = await _userRepo.GetUserByUserName(userName);
-        var leagueUsers = await _leagueRepo.GetLeagueUsersByUserId(user.Id);
-        var leagueUser = leagueUsers.FirstOrDefault(x => x.LeagueId == leagueId);
+        var leagueUser = await _leagueRepo.GetLeagueUserByUserIdAndLeagueId(user.Id, leagueId);
         if (leagueUser is { Role: UserRoles.Admin })
         {
             return true;
@@ -30,9 +29,12 @@ public class AuthorizationService : IAuthorizationService
     public async Task<bool> CheckIsUser(int leagueId, string userName)
     {
         var user = await _userRepo.GetUserByUserName(userName);
-        var leagueUsers = await _leagueRepo.GetLeagueUsersByUserId(user.Id);
-        var leagueUser = leagueUsers.FirstOrDefault(x => x.LeagueId == leagueId);
+        var leagueUser = await _leagueRepo.GetLeagueUserByUserIdAndLeagueId(user.Id, leagueId);
         if (leagueUser is { Role: UserRoles.User })
+        {
+            return true;
+        }
+        if (leagueUser is { Role: UserRoles.Admin })
         {
             return true;
         }
