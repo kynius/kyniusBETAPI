@@ -4,6 +4,6 @@ namespace kyniusBETAPI.Interface.Repo;
 
 public interface IFootballLeagueRepo
 {
-    public Task<FootballLeague> CheckFootballLeagueInBase(FootballLeague model);
-    public Task<FootballLeague> AddFootballLeague(FootballLeague model);
+    Task<FootballLeague> CheckFootballLeagueInBase(FootballLeague model);
+    Task<FootballLeague> AddFootballLeague(FootballLeague model);
 }

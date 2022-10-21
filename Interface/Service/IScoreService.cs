@@ -4,5 +4,5 @@ namespace kyniusBETAPI.Interface.Service;
 
 public interface IScoreService
 {
-    public Task<Score> CheckScoreInBase(Score model);
+    Task<Score> CheckScoreInBase(Score model);
 }

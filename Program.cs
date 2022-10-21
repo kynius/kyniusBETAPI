@@ -7,19 +7,24 @@ using kyniusBETAPI.Model;
 using kyniusBETAPI.Repo;
 using kyniusBETAPI.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+{
+    ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+};
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<IAuthenticationRepo,AuthenticationRepo>();
+builder.Services.AddTransient<IAuthenticationService,AuthenticationService>();
 builder.Services.AddTransient<IRequestRepo,RequestRepo>();
 builder.Services.AddTransient<AdminBuilder>();
 builder.Services.AddTransient<IMatchRepo,MatchRepo>();
@@ -30,6 +35,11 @@ builder.Services.AddTransient<IStatusRepo,StatusRepo>();
 builder.Services.AddTransient<ITeamRepo,TeamRepo>();
 builder.Services.AddTransient<IMatchService,MatchService>();
 builder.Services.AddTransient<IScoreService,ScoreService>();
+builder.Services.AddTransient<ILeagueRepo,LeagueRepo>();
+builder.Services.AddTransient<ILeagueService,LeagueService>();
+builder.Services.AddTransient<IUserRepo,UserRepo>();
+builder.Services.AddTransient<IInviteRepo,InviteRepo>();
+builder.Services.AddTransient<IInviteService,InviteService>();
 builder.Services.AddDbContext<BetDB>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("betDB")));
 builder.Services.AddIdentity<User, IdentityRole>()
@@ -55,7 +65,6 @@ builder.Services.AddAuthentication(options =>
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
         };
     });
-builder.Services.AddAuthorization();
 var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

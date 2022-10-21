@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using kyniusBETAPI.Data;
 
@@ -11,9 +12,11 @@ using kyniusBETAPI.Data;
 namespace kyniusBETAPI.Migrations
 {
     [DbContext(typeof(BetDB))]
-    partial class BetDBModelSnapshot : ModelSnapshot
+    [Migration("20221008135232_AddingUserRoleToLeagueUser")]
+    partial class AddingUserRoleToLeagueUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,41 +156,6 @@ namespace kyniusBETAPI.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("kyniusBETAPI.Model.Invite", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("InvitedUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("InvitingUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("LeagueId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("InvitedUserId");
-
-                    b.HasIndex("InvitingUserId");
-
-                    b.HasIndex("LeagueId");
-
-                    b.ToTable("Invite");
                 });
 
             modelBuilder.Entity("kyniusBETAPI.Model.League", b =>
@@ -583,27 +551,6 @@ namespace kyniusBETAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("kyniusBETAPI.Model.Invite", b =>
-                {
-                    b.HasOne("kyniusBETAPI.Model.User", "InvitedUser")
-                        .WithMany()
-                        .HasForeignKey("InvitedUserId");
-
-                    b.HasOne("kyniusBETAPI.Model.User", "InvitingUser")
-                        .WithMany()
-                        .HasForeignKey("InvitingUserId");
-
-                    b.HasOne("kyniusBETAPI.Model.League", "League")
-                        .WithMany()
-                        .HasForeignKey("LeagueId");
-
-                    b.Navigation("InvitedUser");
-
-                    b.Navigation("InvitingUser");
-
-                    b.Navigation("League");
                 });
 
             modelBuilder.Entity("kyniusBETAPI.Model.LeagueUser", b =>

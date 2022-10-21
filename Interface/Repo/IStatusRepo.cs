@@ -4,6 +4,6 @@ namespace kyniusBETAPI.Interface.Repo;
 
 public interface IStatusRepo
 {
-    public Task<Status> CheckStatusInBase(Status model);
-    public Task<Status> AddStatusToBase(Status model);
+    Task<Status> CheckStatusInBase(Status model);
+    Task<Status> AddStatusToBase(Status model);
 }

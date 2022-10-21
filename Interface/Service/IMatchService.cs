@@ -5,5 +5,5 @@ namespace kyniusBETAPI.Interface.Service;
 
 public interface IMatchService
 {
-    public Task<List<Match>> AddMatchesToDataBase(List<MatchDTO> matches);
+    Task<List<Match>> AddMatchesToDataBase(List<MatchDTO> matches);
 }

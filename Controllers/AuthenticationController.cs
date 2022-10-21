@@ -1,28 +1,35 @@
 using kyniusBETAPI.Data.DTO;
-using kyniusBETAPI.Interface.Repo;
-using kyniusBETAPI.Repo;
+using kyniusBETAPI.Interface.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace kyniusBETAPI.Controllers;
 public class AuthenticationController : ApiController
 {
-    private readonly IAuthenticationRepo _authenticationRepo;
+    private readonly IAuthenticationService _authenticationService;
 
-    public AuthenticationController(IAuthenticationRepo authenticationRepo)
+    public AuthenticationController(IAuthenticationService authenticationService)
     {
-        _authenticationRepo = authenticationRepo;
+        _authenticationService = authenticationService;
     }
 
     [HttpPost]
     public async Task<IActionResult> Register([FromBody] UserRegisterDTO model)
     {
-        var response = await _authenticationRepo.Register(model);
-        return Ok(response);
+        if (ModelState.IsValid)
+        {
+            var response = await _authenticationService.Register(model);
+            return Ok(response);
+        }
+        return BadRequest(ModelState);
     }
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] UserLoginDTO model)
     {
-        var response = await _authenticationRepo.Login(model);
-        return Ok(response);
+        if (ModelState.IsValid)
+        {
+            var response = await _authenticationService.Login(model);
+            return Ok(response);
+        }
+        return BadRequest(ModelState);
     }
 }

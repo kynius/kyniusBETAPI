@@ -4,26 +4,28 @@ using System.Text;
 using kyniusBETAPI.AbstractModel;
 using kyniusBETAPI.Data.DTO;
 using kyniusBETAPI.Interface.Repo;
+using kyniusBETAPI.Interface.Service;
 using kyniusBETAPI.Model;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace kyniusBETAPI.Repo;
+namespace kyniusBETAPI.Service;
 
-public class AuthenticationRepo : IAuthenticationRepo
+public class AuthenticationService : IAuthenticationService
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
+    private readonly ILeagueRepo _leagueRepo;
 
-    public AuthenticationRepo(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+    public AuthenticationService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, ILeagueRepo leagueRepo)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _configuration = configuration;
+        _leagueRepo = leagueRepo;
     }
-
     public async Task<Response> Register(UserRegisterDTO model)
     {
         var userExist = await _userManager.FindByNameAsync(model.UserName);
@@ -52,7 +54,6 @@ public class AuthenticationRepo : IAuthenticationRepo
             ResponseNumber = StatusCodes.Status201Created
         };
     }
-
     public async Task<Response> Login(UserLoginDTO model)
     {
         var user = new User();
@@ -64,17 +65,17 @@ public class AuthenticationRepo : IAuthenticationRepo
         {
             user = await _userManager.FindByNameAsync(model.UserName);
         }
-
         if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
         {
             var userRoles = await _userManager.GetRolesAsync(user);
             var authClaims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),  
             };
             var secret = _configuration["JWT:Secret"];
             var authSigninKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+            user.LeagueUser = await _leagueRepo.GetLeagueUsersByUserId(user.Id);
             foreach (var userRole in userRoles)
             {
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
@@ -89,7 +90,6 @@ public class AuthenticationRepo : IAuthenticationRepo
             var encryptedToken = new JwtSecurityTokenHandler().WriteToken(token);
             return new Response { Token = encryptedToken, Message = "User is loged in", IsSucceeded = true, ResponseNumber = StatusCodes.Status202Accepted};
         }
-
         return new Response
         {
             Message = "Login or password is valid", 
