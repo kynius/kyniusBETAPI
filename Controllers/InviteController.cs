@@ -7,6 +7,7 @@ using IAuthorizationService = kyniusBETAPI.Interface.Service.IAuthorizationServi
 
 namespace kyniusBETAPI.Controllers;
 
+[Authorize]
 public class InviteController : ApiController
 {
     private readonly IInviteService _inviteService;

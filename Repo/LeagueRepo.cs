@@ -78,4 +78,14 @@ public class LeagueRepo : ILeagueRepo
     {
         return await _db.LeagueUser.Where(x => x.UserId == userId).ToListAsync();
     }
+    public async Task<LeagueUser?> GetLeagueUserByUserIdAndLeagueId(string userId, int leagueId)
+    {
+        var leagueUsers = await GetLeagueUsersByUserId(userId);
+        var leagueUser = leagueUsers.FirstOrDefault(x => x.LeagueId == leagueId);
+        if (leagueUser != null)
+        {
+            return leagueUser;
+        }
+        return null;
+    }
 }

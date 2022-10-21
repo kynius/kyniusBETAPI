@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using IAuthorizationService = kyniusBETAPI.Interface.Service.IAuthorizationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +41,9 @@ builder.Services.AddTransient<ILeagueService,LeagueService>();
 builder.Services.AddTransient<IUserRepo,UserRepo>();
 builder.Services.AddTransient<IInviteRepo,InviteRepo>();
 builder.Services.AddTransient<IInviteService,InviteService>();
+builder.Services.AddTransient<IAuthorizationService,AuthorizationService>();
+builder.Services.AddTransient<IBetRepo,BetRepo>();
+builder.Services.AddTransient<IBetService,BetService>();
 builder.Services.AddDbContext<BetDB>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("betDB")));
 builder.Services.AddIdentity<User, IdentityRole>()

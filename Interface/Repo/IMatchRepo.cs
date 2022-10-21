@@ -7,4 +7,5 @@ public interface IMatchRepo
 {
     Task<Match> CheckMatchInBase(Match model);
     Task<Match> AddMatchToBase(Match model);
+    Task<Match?> GetMatchById(int id);
 }

@@ -32,4 +32,10 @@ public class MatchRepo : IMatchRepo
         await _db.SaveChangesAsync();
         return model;
     }
+
+    public async Task<Match?> GetMatchById(int id)
+    {
+        var match = await _db.Match.Include(x => x.Away).Include(x => x.Home).FirstOrDefaultAsync(x => x.Id == id);
+        return match ?? null;
+    }
 }
