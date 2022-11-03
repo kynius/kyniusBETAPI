@@ -21,6 +21,8 @@ public class BetDB : IdentityDbContext<User>
     public DbSet<Team> Team { get; set; }= null!;
     public DbSet<Invite> Invite { get; set; }= null!;
     public DbSet<Bet> Bet { get; set; }= null!;
+    public DbSet<BetType> BetType { get; set; }= null!;
+    public DbSet<LeagueBet> LeagueBet { get; set; }= null!;
     protected override void OnModelCreating(ModelBuilder builder)
     {   
         builder.Entity<LeagueUser>()
@@ -31,6 +33,21 @@ public class BetDB : IdentityDbContext<User>
             .HasOne(c => c.League)
             .WithMany(c => c.LeagueUser)
             .HasForeignKey(c => c.LeagueId);
+        builder.Entity<Bet>().Navigation(x => x.LeagueBet).AutoInclude();
+        builder.Entity<LeagueBet>().Navigation(x => x.BetType).AutoInclude();
+        builder.Entity<LeagueBet>().Navigation(x => x.Match).AutoInclude();
+        builder.Entity<Match>().Navigation(x => x.Away).AutoInclude();
+        builder.Entity<Match>().Navigation(x => x.Home).AutoInclude();
+        builder.Entity<Match>().Navigation(x => x.Goals).AutoInclude();
+        builder.Entity<Match>().Navigation(x => x.Score).AutoInclude();
+        builder.Entity<Match>().Navigation(x => x.Status).AutoInclude();
+        builder.Entity<Match>().Navigation(x => x.FootballLeague).AutoInclude();
+        builder.Entity<Score>().Navigation(x => x.Extratime).AutoInclude();
+        builder.Entity<Score>().Navigation(x => x.Fulltime).AutoInclude();
+        builder.Entity<Score>().Navigation(x => x.Halftime).AutoInclude();
+        builder.Entity<Score>().Navigation(x => x.Penalty).AutoInclude();
+        builder.Entity<Score>().Navigation(x => x.GoalsInFirsthalf).AutoInclude();
+        builder.Entity<Score>().Navigation(x => x.GoalsInSecondhalf).AutoInclude();
         base.OnModelCreating(builder);
     }
 }

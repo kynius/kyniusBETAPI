@@ -19,7 +19,7 @@ public class BetController : ApiController
     }
     [HttpPost]
     [Route("{leagueId}")]
-    public async Task<IActionResult> AddBet(int leagueId, [FromBody] BetDTO model)
+    public async Task<IActionResult> AddBet(int leagueId, [FromBody] List<BetDTO> model)
     {
         var userName = User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
         if (userName != null && ModelState.IsValid)
