@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace kyniusBETAPI.Controllers;
-
-[Authorize(Roles = UserRoles.Owner)]
 public class AdminController : ApiController
 {
     private readonly AdminBuilder _builder;
@@ -14,10 +12,16 @@ public class AdminController : ApiController
     {
         _builder = builder;
     }
-
+    [Authorize(Roles = UserRoles.Owner)]
     [HttpGet]
     public async Task<IActionResult> SetMatches()
     {
         return Ok(await _builder.Build());
+    }
+    [Authorize(Roles = UserRoles.Owner)]
+    [HttpGet]
+    public async Task<IActionResult> CheckBets()
+    {
+        return Ok(await _builder.CheckBets());
     }
 }

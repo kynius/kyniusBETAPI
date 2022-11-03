@@ -4,6 +4,7 @@ using kyniusBETAPI.Data.ViewModel;
 using kyniusBETAPI.Interface.Repo;
 using kyniusBETAPI.Interface.Service;
 using kyniusBETAPI.Model;
+using kyniusBETAPI.Model.Match;
 
 namespace kyniusBETAPI.Service;
 
@@ -21,26 +22,46 @@ public class BetService : IBetService
         _matchRepo = matchRepo;
     }
 
-    public async Task<Response> AddBet(BetDTO model, int leagueId, string userName)
+    public async Task<Response> AddBet(List<BetDTO> model, int leagueId, string userName)
     {
         var user = await _userRepo.GetUserByUserName(userName);
-        var leagueUser = await _leagueRepo.GetLeagueUserByUserIdAndLeagueId(user.Id, leagueId);
-        var bet = new Bet(model);
-        if(leagueUser != null)
-            bet.LeagueUserId = leagueUser.Id;
-        var match = await _matchRepo.GetMatchById(model.MatchId);
-        if(match != null)
-            bet.Match = match;
-        var addedBet = await _betRepo.AddBet(bet);
-        var mappedModel = new BetViewModel(addedBet);
+        var bets = new List<BetViewModel>();
+        foreach (var m in model)
+        {
+            if (m.DateToBet > DateTime.Now)
+            {
+                var bet = new Bet(m);
+                bet.UserId = user.Id;
+                var addedBet = await _betRepo.AddBet(bet);
+                var mappedModel = new BetViewModel(addedBet);
+                bets.Add(mappedModel);
+            }
+        }
         return new Response
         {
             IsSucceeded = true,
-            Message = mappedModel,
+            Message = bets,
             ResponseNumber = StatusCodes.Status202Accepted
         };
     }
-
+    public async Task<Response> AddLeagueBets(List<LeagueBetDTO> model, string userName, int leagueId)
+    {
+        var user = await _userRepo.GetUserByUserName(userName);
+        foreach (var m in model)
+        {
+            var match = await _matchRepo.GetMatchById(m.MatchId.GetValueOrDefault());
+            if (match != null)
+            {
+                 await _betRepo.AddLeagueBet(m, user.Id ,leagueId, match.Date.GetValueOrDefault());
+            }
+        }
+        return new Response
+        {
+            ResponseNumber = StatusCodes.Status202Accepted,
+            IsSucceeded = true,
+            Message = "League Bets Added"
+        };
+    }
     public async Task<Response> GetAllUserBetsInLeague(int leagueId, string userName)
     {
         var user = await _userRepo.GetUserByUserName(userName);
@@ -52,5 +73,37 @@ public class BetService : IBetService
             Message = mappedUserBets,
             ResponseNumber = StatusCodes.Status202Accepted
         };
+    }
+
+    public async Task<Response> GetALlLeagueBets(int leagueId)
+    {
+        var leagueBets = await _betRepo.GetAllLeagueBets(leagueId);
+        if (leagueBets.Any())
+        {
+            return new Response
+            {
+                IsSucceeded = true,
+                Message = leagueBets,
+                ResponseNumber = StatusCodes.Status202Accepted
+            };
+        }
+
+        return new Response
+        {
+            IsSucceeded = true,
+            Message = "League have no active bets",
+            ResponseNumber = StatusCodes.Status204NoContent
+        };
+    }
+    public async Task<List<BetViewModel>> CheckAllBets(List<Match> matches)
+    {
+        var mappedBets = new List<BetViewModel>();
+        var bets = await _betRepo.GetAllBets(DateTime.Now.Date);
+        var bet = DateTime.Now.Date;
+        foreach (var b in bets)
+        {
+            mappedBets.Add(await _betRepo.CheckBet(b));
+        }
+        return mappedBets;
     }
 }

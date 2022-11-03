@@ -12,8 +12,8 @@ using kyniusBETAPI.Data;
 namespace kyniusBETAPI.Migrations
 {
     [DbContext(typeof(BetDB))]
-    [Migration("20221021191300_AddingBet")]
-    partial class AddingBet
+    [Migration("20221028141905_AddingBetTypeAndSmallFixInBet")]
+    partial class AddingBetTypeAndSmallFixInBet
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,20 +166,17 @@ namespace kyniusBETAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BetType")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<bool?>("IsCorrect")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LeagueUserId")
+                    b.Property<int>("LeagueBetId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MatchId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -187,11 +184,28 @@ namespace kyniusBETAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LeagueUserId");
+                    b.HasIndex("LeagueBetId");
 
-                    b.HasIndex("MatchId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Bet");
+                });
+
+            modelBuilder.Entity("kyniusBETAPI.Model.BetType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BetType");
                 });
 
             modelBuilder.Entity("kyniusBETAPI.Model.Invite", b =>
@@ -244,6 +258,40 @@ namespace kyniusBETAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("League");
+                });
+
+            modelBuilder.Entity("kyniusBETAPI.Model.LeagueBet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BetTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateToBet")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("LeagueId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MatchId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BetTypeId");
+
+                    b.HasIndex("LeagueId");
+
+                    b.HasIndex("MatchId");
+
+                    b.ToTable("LeagueBet");
                 });
 
             modelBuilder.Entity("kyniusBETAPI.Model.LeagueUser", b =>
@@ -626,19 +674,19 @@ namespace kyniusBETAPI.Migrations
 
             modelBuilder.Entity("kyniusBETAPI.Model.Bet", b =>
                 {
-                    b.HasOne("kyniusBETAPI.Model.LeagueUser", "LeagueUser")
+                    b.HasOne("kyniusBETAPI.Model.LeagueBet", "LeagueBet")
                         .WithMany()
-                        .HasForeignKey("LeagueUserId")
+                        .HasForeignKey("LeagueBetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("kyniusBETAPI.Model.Match.Match", "Match")
+                    b.HasOne("kyniusBETAPI.Model.User", "User")
                         .WithMany()
-                        .HasForeignKey("MatchId");
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("LeagueUser");
+                    b.Navigation("LeagueBet");
 
-                    b.Navigation("Match");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("kyniusBETAPI.Model.Invite", b =>
@@ -660,6 +708,27 @@ namespace kyniusBETAPI.Migrations
                     b.Navigation("InvitingUser");
 
                     b.Navigation("League");
+                });
+
+            modelBuilder.Entity("kyniusBETAPI.Model.LeagueBet", b =>
+                {
+                    b.HasOne("kyniusBETAPI.Model.BetType", "BetType")
+                        .WithMany()
+                        .HasForeignKey("BetTypeId");
+
+                    b.HasOne("kyniusBETAPI.Model.League", "League")
+                        .WithMany()
+                        .HasForeignKey("LeagueId");
+
+                    b.HasOne("kyniusBETAPI.Model.Match.Match", "Match")
+                        .WithMany()
+                        .HasForeignKey("MatchId");
+
+                    b.Navigation("BetType");
+
+                    b.Navigation("League");
+
+                    b.Navigation("Match");
                 });
 
             modelBuilder.Entity("kyniusBETAPI.Model.LeagueUser", b =>

@@ -1,14 +1,14 @@
 using System.ComponentModel.DataAnnotations;
-using kyniusBETAPI.Data.Enums;
+using kyniusBETAPI.Model;
 
 namespace kyniusBETAPI.Data.DTO;
 
 public class BetDTO
 {
     [Required(ErrorMessage = "Bet type is required")]
-    public BetTypesEnum BetType { get; set; }
-    [Required(ErrorMessage = "MatchId is required")]
-    public int MatchId { get; set; }
+    public int LeagueBetId { get; set; }
     [Required(ErrorMessage = "Value is required")]
     public string Value { get; set; } = String.Empty!;
+    [Required(ErrorMessage = "Date To Bet is required")]
+    public DateTime DateToBet { get; set; }
 }

@@ -1,4 +1,6 @@
+using kyniusBETAPI.AbstractModel;
 using kyniusBETAPI.Data.DTO;
+using kyniusBETAPI.Data.ViewModel;
 using kyniusBETAPI.Interface.Repo;
 using kyniusBETAPI.Interface.Service;
 using kyniusBETAPI.Model.Match;
@@ -13,8 +15,9 @@ public class MatchService : IMatchService
     private readonly IFootballLeagueRepo _footballLeagueRepo;
     private readonly IScoreService _scoreService;
     private readonly IMatchRepo _matchRepo;
+    private readonly IBetRepo _betRepo;
 
-    public MatchService(ITeamRepo teamsRepo, IStatusRepo statusRepo, IGoalsRepo goalsRepo, IFootballLeagueRepo footballLeagueRepo, IScoreService scoreService, IMatchRepo matchRepo)
+    public MatchService(ITeamRepo teamsRepo, IStatusRepo statusRepo, IGoalsRepo goalsRepo, IFootballLeagueRepo footballLeagueRepo, IScoreService scoreService, IMatchRepo matchRepo, IBetRepo betRepo)
     {
         _teamsRepo = teamsRepo;
         _statusRepo = statusRepo;
@@ -22,6 +25,7 @@ public class MatchService : IMatchService
         _footballLeagueRepo = footballLeagueRepo;
         _scoreService = scoreService;
         _matchRepo = matchRepo;
+        _betRepo = betRepo;
     }
 
     public async Task<List<Match>> AddMatchesToDataBase(List<MatchDTO> matches)
@@ -40,5 +44,15 @@ public class MatchService : IMatchService
         }
 
         return mappedMatches;
+    }
+
+    public async Task<Response> GetAllMatches()
+    {
+        return new Response
+        {
+            ResponseNumber = StatusCodes.Status202Accepted,
+            Message = await _matchRepo.GetAllMatches(),
+            IsSucceeded = true
+        };
     }
 }
