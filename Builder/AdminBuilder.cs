@@ -29,7 +29,7 @@ public class AdminBuilder
     }
     public async Task<List<BetViewModel>> CheckBets()
     {
-        var date = DateTime.Now.AddDays(-1);
+        var date = DateTime.Now;
         var query = $"fixtures?season=2022&league=2&date={date.ToString("yyyy-MM-dd")}"; 
         var response = await _requestRepo.Request<List<MatchDTO>>(query);
         var matches = await _matchService.AddMatchesToDataBase(response);

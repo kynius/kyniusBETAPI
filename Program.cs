@@ -44,7 +44,7 @@ builder.Services.AddTransient<IInviteService,InviteService>();
 builder.Services.AddTransient<IAuthorizationService,AuthorizationService>();
 builder.Services.AddTransient<IBetRepo,BetRepo>();
 builder.Services.AddTransient<IBetService,BetService>();
-
+builder.Services.AddCors();
 builder.Services.AddDbContext<BetDB>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("betDB")));
 builder.Services.AddIdentity<User, IdentityRole>()
@@ -71,6 +71,11 @@ builder.Services.AddAuthentication(options =>
         };
     });
 var app = builder.Build();
+app.UseCors(x => x
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .SetIsOriginAllowed(origin => true)
+    .AllowCredentials()); 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
