@@ -10,4 +10,5 @@ public class LeagueUser
     public virtual League League { get; set; } = null!;
     public int LeagueId { get; set; }
     public string Role { get; set; } = String.Empty!;
+    public int Points { get; set; }
 }

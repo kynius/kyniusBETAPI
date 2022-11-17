@@ -12,4 +12,5 @@ public interface IBetService
     Task<Response> GetAllUserBetsInLeague(int leagueId, string userName);
     Task<Response> GetALlLeagueBets(int leagueId);
     Task<List<BetViewModel>> CheckAllBets(List<Match> matches);
+    Task<Response> GetAllBetTypes();
 }

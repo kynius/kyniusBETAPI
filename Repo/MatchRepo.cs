@@ -55,6 +55,6 @@ public class MatchRepo : IMatchRepo
 
     public async Task<List<Match>> GetAllMatches()
     {
-        return await _db.Match.Where(x => x.Date > DateTime.Now).Include(x => x.Home).Include(x => x.Away).Include(x => x.Goals).Include(x => x.Score).ToListAsync();
+        return await _db.Match.Where(x => x.Date > DateTime.Now).Include(x => x.Home).Include(x => x.Away).Include(x => x.Goals).Include(x => x.Score).OrderBy(x => x.Date).ToListAsync();
     }
 }

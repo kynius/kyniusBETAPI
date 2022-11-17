@@ -200,6 +200,9 @@ namespace kyniusBETAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PointValue")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("BetType");
@@ -305,6 +308,9 @@ namespace kyniusBETAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("LeagueId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Points")
                         .HasColumnType("int");
 
                     b.Property<string>("Role")

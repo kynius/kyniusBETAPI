@@ -23,7 +23,7 @@ public class AdminBuilder
         var dates = new List<string>();
         var date = DateTime.Now;
         var d = date.AddDays(6).ToString("yyyy-MM-dd");
-        var query = $"fixtures?to={d}&season=2022&league=2&from={date.ToString("yyyy-MM-dd")}"; 
+        var query = $"fixtures?to={d}&season=2022&league=1&from={date.ToString("yyyy-MM-dd")}"; 
         var response = await _requestRepo.Request<List<MatchDTO>>(query);
         return(await _matchService.AddMatchesToDataBase(response));
     }

@@ -70,7 +70,8 @@ public class BetRepo : IBetRepo
                 AwayTeam = lb.Match.Away,
                 BetType = lb.BetType,
                 DateTime = lb.Match.Date.GetValueOrDefault(),
-                DateToBet = lb.DateToBet
+                DateToBet = lb.DateToBet,
+                MatchId = lb.Match.Id
             });
         }
         return betList;
@@ -117,6 +118,11 @@ public class BetRepo : IBetRepo
 
         model = UpdateBet(model);
         return new BetViewModel(model);
+    }
+
+    public async Task<List<BetType>> GetAllBetTypes()
+    {
+        return await _db.BetType.ToListAsync();
     }
 
     private async Task<LeagueBet?> CheckLeagueBet(int leagueId, int matchId)

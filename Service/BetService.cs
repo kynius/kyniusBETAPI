@@ -106,4 +106,14 @@ public class BetService : IBetService
         }
         return mappedBets;
     }
+
+    public async Task<Response> GetAllBetTypes()
+    {
+        return new Response
+        {
+            IsSucceeded = true,
+            Message = await _betRepo.GetAllBetTypes(),
+            ResponseNumber = StatusCodes.Status200OK
+        };
+    }
 }

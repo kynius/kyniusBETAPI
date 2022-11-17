@@ -14,4 +14,5 @@ public interface IBetRepo
     Task<List<BetViewModel>> GetAllLeagueBets(int leagueId);
     Task<List<Bet>> GetAllBets(DateTime? dateTime);
     Task<BetViewModel> CheckBet(Bet model);
+    Task<List<BetType>> GetAllBetTypes();
 }

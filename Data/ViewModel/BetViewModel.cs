@@ -13,6 +13,7 @@ public class BetViewModel
     public DateTime DateTime { get; set; }
     public DateTime DateToBet { get; set; }
     public bool? IsCorrect { get; set; }
+    public int MatchId { get; set; }
     public BetViewModel(Bet bet)
     {
         Value = bet.Value;

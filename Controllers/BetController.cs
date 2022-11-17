@@ -61,4 +61,21 @@ public class BetController : ApiController
             ResponseNumber = StatusCodes.Status403Forbidden
         });
     }
+    [HttpGet]
+    [Route("{leagueId}")]
+    public async Task<IActionResult> GetAllBetTypes(int leagueId)
+    {
+        var userName = User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
+        if (userName != null && await _authorizationService.CheckIsUser(leagueId, userName))
+        {
+            var bets = await _betService.GetAllBetTypes();
+            return Ok(bets);
+        }
+        return BadRequest(new Response
+        {
+            IsSucceeded = false,
+            Message = "Forbidden",
+            ResponseNumber = StatusCodes.Status403Forbidden
+        });
+    }
 }

@@ -29,7 +29,7 @@ public class LeagueBetController : ApiController
             var result = await _matchService.GetAllMatches();
             return Ok(result);
         }
-        return Ok();
+        return Unauthorized();
     }
     [HttpPost]
     [Route("{leagueId}")]
@@ -41,7 +41,7 @@ public class LeagueBetController : ApiController
             var result = await _betService.AddLeagueBets(model, userName, leagueId);
             return Ok(result);
         }
-        return Ok();
+        return Unauthorized();
     }
     [HttpGet]
     [Route("{leagueId}")]
@@ -53,6 +53,6 @@ public class LeagueBetController : ApiController
             var result = await _betService.GetALlLeagueBets(leagueId);
             return Ok(result);
         }
-        return Ok();
+        return Unauthorized();
     }
 }
