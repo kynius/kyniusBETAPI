@@ -20,9 +20,21 @@ public class BetRepo : IBetRepo
 
     public async Task<Bet> AddBet(Bet model)
     {
-        await _db.AddAsync(model);
-        await _db.SaveChangesAsync();
-        return model;
+        var modelFromDb =
+            await _db.Bet.FirstOrDefaultAsync(x => x.LeagueBetId == model.LeagueBetId && x.UserId == model.UserId);
+        if (modelFromDb == null)
+        {
+            await _db.AddAsync(model);
+            await _db.SaveChangesAsync();
+            return model;
+        }
+        else
+        {
+            modelFromDb.Value = model.Value;
+            _db.Entry(modelFromDb).State = EntityState.Modified;
+            _db.SaveChanges();
+        }
+        return modelFromDb;
     }
     public Bet UpdateBet(Bet model)
     {
@@ -52,9 +64,13 @@ public class BetRepo : IBetRepo
         return leagueBet;
     }
 
-    public async Task<List<Bet>> GetAllUserBetsInLeague(string userId, int leagueId)
+    public async Task<List<Bet>> GetAllUserBetsInLeague(string userId, int leagueId, bool onlyActive)
     {
-        return await _db.Bet.Where(x => x.UserId == userId).Include(x => x.LeagueBet).Where(x => x.LeagueBet.LeagueId == leagueId).ToListAsync();
+        if (onlyActive == true)
+        {
+            return await _db.Bet.Where(x => x.UserId == userId).Where(x => x.LeagueBet.DateToBet > DateTime.Now).Include(x => x.LeagueBet).Where(x => x.LeagueBet.LeagueId == leagueId).OrderBy(x => x.LeagueBet.Match.Date).ToListAsync();
+        }
+        return await _db.Bet.Where(x => x.UserId == userId).Include(x => x.LeagueBet).Where(x => x.LeagueBet.LeagueId == leagueId).OrderByDescending(x => x.LeagueBet.Match.Date).ToListAsync();
     }
 
     public async Task<List<BetViewModel>> GetAllLeagueBets(int leagueId)
@@ -77,9 +93,9 @@ public class BetRepo : IBetRepo
         return betList;
     }
 
-    public async Task<List<Bet>> GetAllBets(DateTime? dateTime)
+    public async Task<List<Bet>> GetAllBets()
     {
-        return await _db.Bet.Where(x => x.LeagueBet.DateToBet.Date == dateTime).Include(x => x.LeagueBet).ToListAsync();
+        return await _db.Bet.Where(x => x.LeagueBet.Match.Status.Short ==  "FT").Where(x => x.IsCorrect == null).Include(x => x.LeagueBet).ToListAsync();
     }
 
     public async Task<BetViewModel> CheckBet(Bet model)
@@ -94,6 +110,17 @@ public class BetRepo : IBetRepo
             {
                 model.IsCorrect = model.LeagueBet.Match.Score.IsAwayWinnerFullMatch;
             }
+            if (int.Parse(model.Value) == 0)
+            {
+                if (model.LeagueBet.Match.Score.Fulltime.Away == model.LeagueBet.Match.Score.Fulltime.Home)
+                {
+                    model.IsCorrect = true;
+                }
+                else
+                {
+                    model.IsCorrect = false;
+                }
+            }
         }
         if (model.LeagueBet.BetType.Name is BetTypes.BothTeamToScore)
         {
@@ -103,11 +130,7 @@ public class BetRepo : IBetRepo
             }
             else if (!bool.Parse(model.Value))
             {
-                model.IsCorrect = model.LeagueBet.Match.Goals.Away == 0 && model.LeagueBet.Match.Goals.Home == 0;
-            }
-            else
-            {
-                model.IsCorrect = false;
+                model.IsCorrect = model.LeagueBet.Match.Goals.Away == 0 || model.LeagueBet.Match.Goals.Home == 0;
             }
         }
         if (model.LeagueBet.BetType.Name is BetTypes.Score)
@@ -123,6 +146,11 @@ public class BetRepo : IBetRepo
     public async Task<List<BetType>> GetAllBetTypes()
     {
         return await _db.BetType.ToListAsync();
+    }
+
+    public async Task<LeagueBet> GetLeagueBetById(int id)
+    {
+        return await _db.LeagueBet.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     private async Task<LeagueBet?> CheckLeagueBet(int leagueId, int matchId)

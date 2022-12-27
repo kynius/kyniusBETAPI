@@ -39,19 +39,19 @@ public class BetController : ApiController
         return BadRequest(new Response
         {
             IsSucceeded = false,
-            Message = ModelState,
+            Message = ModelState.ErrorCount,
             ResponseNumber = StatusCodes.Status400BadRequest
         });
     }
 
     [HttpGet]
     [Route("{leagueId}")]
-    public async Task<IActionResult> GetAllBets(int leagueId)
+    public async Task<IActionResult> GetAllBets(int leagueId, bool onlyActive = false)
     {
         var userName = User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.Name)?.Value;
         if (userName != null && await _authorizationService.CheckIsUser(leagueId, userName))
         {
-            var bets = await _betService.GetAllUserBetsInLeague(leagueId, userName);
+            var bets = await _betService.GetAllUserBetsInLeague(leagueId, userName, onlyActive);
             return Ok(bets);
         }
         return BadRequest(new Response

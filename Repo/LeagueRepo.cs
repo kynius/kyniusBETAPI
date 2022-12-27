@@ -88,4 +88,13 @@ public class LeagueRepo : ILeagueRepo
         }
         return null;
     }
+
+    public async Task AddPoints(Bet bet)
+    {
+        var leagueUser = await GetLeagueUserByUserIdAndLeagueId(bet.UserId, bet.LeagueBet.LeagueId.GetValueOrDefault());
+        if (bet.IsCorrect == true)
+        {
+            leagueUser.Points = leagueUser.Points + bet.LeagueBet.BetType.PointValue.GetValueOrDefault();
+        }
+    }
 }

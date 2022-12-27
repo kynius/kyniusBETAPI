@@ -19,4 +19,9 @@ public class UserRepo : IUserRepo
         var user = await _userManager.FindByNameAsync(userName);
         return user;
     }
+
+    public async Task AddPoints(Bet bet, LeagueUser leagueUser)
+    {
+        var user = await _userManager.FindByIdAsync(bet.UserId);
+    }
 }

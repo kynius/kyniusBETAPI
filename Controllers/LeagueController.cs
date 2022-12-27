@@ -38,7 +38,7 @@ public class LeagueController : ApiController
         {
             return Ok(leagues);
         }
-        return BadRequest(new Response
+        return Ok(new Response
         {
             IsSucceeded = false,
             Message = "User have no leagues",

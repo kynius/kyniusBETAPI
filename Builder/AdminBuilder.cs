@@ -20,7 +20,6 @@ public class AdminBuilder
 
     public async Task<List<Match>> Build()
     {
-        var dates = new List<string>();
         var date = DateTime.Now;
         var d = date.AddDays(6).ToString("yyyy-MM-dd");
         var query = $"fixtures?to={d}&season=2022&league=1&from={date.ToString("yyyy-MM-dd")}"; 
@@ -30,7 +29,8 @@ public class AdminBuilder
     public async Task<List<BetViewModel>> CheckBets()
     {
         var date = DateTime.Now;
-        var query = $"fixtures?season=2022&league=2&date={date.ToString("yyyy-MM-dd")}"; 
+        var d = date.AddDays(-6).ToString("yyyy-MM-dd");
+        var query = $"fixtures?to={date.ToString("yyyy-MM-dd")}&season=2022&league=1&from={d}";
         var response = await _requestRepo.Request<List<MatchDTO>>(query);
         var matches = await _matchService.AddMatchesToDataBase(response);
         return(await _betService.CheckAllBets(matches));

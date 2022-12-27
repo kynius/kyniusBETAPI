@@ -33,6 +33,7 @@ public class BetService : IBetService
                 var bet = new Bet(m);
                 bet.UserId = user.Id;
                 var addedBet = await _betRepo.AddBet(bet);
+                addedBet.LeagueBet = await _betRepo.GetLeagueBetById(m.LeagueBetId);
                 var mappedModel = new BetViewModel(addedBet);
                 bets.Add(mappedModel);
             }
@@ -62,10 +63,10 @@ public class BetService : IBetService
             Message = "League Bets Added"
         };
     }
-    public async Task<Response> GetAllUserBetsInLeague(int leagueId, string userName)
+    public async Task<Response> GetAllUserBetsInLeague(int leagueId, string userName, bool onlyActive)
     {
         var user = await _userRepo.GetUserByUserName(userName);
-        var userBets = await _betRepo.GetAllUserBetsInLeague(user.Id, leagueId);
+        var userBets = await _betRepo.GetAllUserBetsInLeague(user.Id, leagueId, onlyActive);
         var mappedUserBets = userBets.Select(ub => new BetViewModel(ub)).ToList();
         return new Response
         {
@@ -98,11 +99,11 @@ public class BetService : IBetService
     public async Task<List<BetViewModel>> CheckAllBets(List<Match> matches)
     {
         var mappedBets = new List<BetViewModel>();
-        var bets = await _betRepo.GetAllBets(DateTime.Now.Date);
-        var bet = DateTime.Now.Date;
+        var bets = await _betRepo.GetAllBets();
         foreach (var b in bets)
         {
             mappedBets.Add(await _betRepo.CheckBet(b));
+            await _leagueRepo.AddPoints(b);
         }
         return mappedBets;
     }

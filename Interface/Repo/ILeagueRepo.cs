@@ -13,4 +13,5 @@ public interface ILeagueRepo
     Task<List<LeagueViewModel>> GetAllLeaguesByUserId(string userId);
     Task<List<LeagueUser>> GetLeagueUsersByUserId(string userId);
     Task<LeagueUser?> GetLeagueUserByUserIdAndLeagueId(string userId, int leagueId);
+    Task AddPoints(Bet bet);
 }

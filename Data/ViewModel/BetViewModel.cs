@@ -14,8 +14,10 @@ public class BetViewModel
     public DateTime DateToBet { get; set; }
     public bool? IsCorrect { get; set; }
     public int MatchId { get; set; }
+    public int LeagueBetId { get; set; }
     public BetViewModel(Bet bet)
     {
+        Id = bet.Id;
         Value = bet.Value;
         DateTime = bet.DateTime;
         IsCorrect = bet.IsCorrect;
@@ -23,6 +25,7 @@ public class BetViewModel
         AwayTeam = bet.LeagueBet.Match.Away;
         BetType = bet.LeagueBet.BetType;
         DateToBet = bet.LeagueBet.DateToBet;
+        LeagueBetId = bet.LeagueBetId;
     }
     public BetViewModel()
     {

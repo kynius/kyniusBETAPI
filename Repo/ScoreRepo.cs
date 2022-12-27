@@ -1,6 +1,7 @@
 using kyniusBETAPI.Data;
 using kyniusBETAPI.Interface.Repo;
 using kyniusBETAPI.Model.Match;
+using Microsoft.EntityFrameworkCore;
 
 namespace kyniusBETAPI.Repo;
 
@@ -16,6 +17,11 @@ public class ScoreRepo : IScoreRepo
 
     public async Task<Score> CheckScoreInBase(Score model)
     {
+        var scoreFromDB = await _db.Score.FirstOrDefaultAsync(x => x == model);
+        if (scoreFromDB != null)
+        {
+            return scoreFromDB;
+        }
         var score = await AddScoreToBase(model);
         return score;
     }
@@ -78,8 +84,8 @@ public class ScoreRepo : IScoreRepo
         //fullmatch
         if (model.Fulltime.Home == model.Fulltime.Away)
         {
-            model.IsHomeWinnerFullMatch = null;
-            model.IsAwayWinnerFullMatch = null;
+            model.IsHomeWinnerFullMatch = false;
+            model.IsAwayWinnerFullMatch = false;
         }
 
         if (model.Fulltime.Home > model.Fulltime.Away)
