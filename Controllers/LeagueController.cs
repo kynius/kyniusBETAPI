@@ -1,8 +1,7 @@
 using System.Security.Claims;
-using kyniusBETAPI.AbstractModel;
+using kyniusBETAPI.NoSQLModel;
 using kyniusBETAPI.Data.DTO;
 using kyniusBETAPI.Interface.Service;
-using kyniusBETAPI.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

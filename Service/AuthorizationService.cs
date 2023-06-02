@@ -1,4 +1,4 @@
-using kyniusBETAPI.AbstractModel;
+using kyniusBETAPI.NoSQLModel;
 using kyniusBETAPI.Interface.Repo;
 using kyniusBETAPI.Interface.Service;
 

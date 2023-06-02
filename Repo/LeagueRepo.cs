@@ -1,5 +1,4 @@
-using System.Security.Claims;
-using kyniusBETAPI.AbstractModel;
+using kyniusBETAPI.NoSQLModel;
 using kyniusBETAPI.Data;
 using kyniusBETAPI.Data.DTO;
 using kyniusBETAPI.Data.ViewModel;

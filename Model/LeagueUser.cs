@@ -1,4 +1,4 @@
-using kyniusBETAPI.AbstractModel;
+using kyniusBETAPI.NoSQLModel;
 
 namespace kyniusBETAPI.Model;
 

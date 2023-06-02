@@ -1,4 +1,4 @@
-using kyniusBETAPI.AbstractModel;
+using kyniusBETAPI.NoSQLModel;
 using kyniusBETAPI.Data.ViewModel;
 using kyniusBETAPI.Model;
 using kyniusBETAPI.Model.Match;

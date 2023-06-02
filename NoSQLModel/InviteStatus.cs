@@ -1,4 +1,4 @@
-namespace kyniusBETAPI.AbstractModel;
+namespace kyniusBETAPI.NoSQLModel;
 
 public static class InviteStatus
 {

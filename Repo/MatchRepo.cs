@@ -1,11 +1,7 @@
-using kyniusBETAPI.AbstractModel;
 using kyniusBETAPI.Data;
-using kyniusBETAPI.Data.ViewModel;
 using kyniusBETAPI.Interface.Repo;
-using kyniusBETAPI.Model;
 using kyniusBETAPI.Model.Match;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 
 namespace kyniusBETAPI.Repo;
 

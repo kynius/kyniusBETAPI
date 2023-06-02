@@ -1,4 +1,4 @@
-using kyniusBETAPI.AbstractModel;
+using kyniusBETAPI.NoSQLModel;
 using kyniusBETAPI.Builder;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

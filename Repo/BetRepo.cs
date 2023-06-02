@@ -1,11 +1,11 @@
-using kyniusBETAPI.AbstractModel;
+using kyniusBETAPI.NoSQLModel;
 using kyniusBETAPI.Data;
 using kyniusBETAPI.Data.DTO;
 using kyniusBETAPI.Data.ViewModel;
 using kyniusBETAPI.Interface.Repo;
 using kyniusBETAPI.Model;
 using Microsoft.EntityFrameworkCore;
-using BetTypes = kyniusBETAPI.AbstractModel.BetTypes;
+using BetTypes = kyniusBETAPI.NoSQLModel.BetTypes;
 
 namespace kyniusBETAPI.Repo;
 

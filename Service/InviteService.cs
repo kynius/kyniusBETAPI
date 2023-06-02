@@ -1,10 +1,8 @@
-using kyniusBETAPI.AbstractModel;
+using kyniusBETAPI.NoSQLModel;
 using kyniusBETAPI.Data.DTO;
 using kyniusBETAPI.Data.ViewModel;
 using kyniusBETAPI.Interface.Repo;
 using kyniusBETAPI.Interface.Service;
-using kyniusBETAPI.Model;
-using kyniusBETAPI.Repo;
 
 namespace kyniusBETAPI.Service;
 

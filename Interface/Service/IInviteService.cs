@@ -1,6 +1,5 @@
-using kyniusBETAPI.AbstractModel;
+using kyniusBETAPI.NoSQLModel;
 using kyniusBETAPI.Data.ViewModel;
-using kyniusBETAPI.Model;
 
 namespace kyniusBETAPI.Interface.Service;
 
